@@ -22,7 +22,8 @@ export default class App extends Component {
       this.createTodo("Build Awesome App"),
       this.createTodo("Have lunch")
     ],
-    pattern: ""
+    pattern: "",
+    filter: "active" //all, active, done
   };
 
   toggleProperty = (arr, id, propName) => {
@@ -70,23 +71,35 @@ export default class App extends Component {
   search = (items, pattern) => {
     if (pattern.length === 0) return items;
     return items.filter(item => {
-      console.log(
-        `${item}: ${item.label.toLowerCase().indexOf(pattern.toLowerCase())}`
-      );
       return item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1;
     });
   };
+  filter = (items, filter) => {
+    switch (filter) {
+      case "all":
+        return items;
+      case "active":
+        return items.filter(item => !item.done);
+      case "done":
+        return items.filter(item => item.done);
+      default:
+        return items;
+    }
+  };
+  onFilterChange = filter => {
+    this.setState({ filter });
+  };
   render() {
-    const { todos, pattern } = this.state;
+    const { todos, pattern, filter } = this.state;
     const doneCount = todos.filter(todo => todo.done).length;
     const todoCount = todos.length - doneCount;
-    const filteredTodos = this.search(todos, pattern);
+    const filteredTodos = this.filter(this.search(todos, pattern), filter);
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
           <SearchBar onSearchChange={this.onSearchChange} />
-          <StatusFilter />
+          <StatusFilter onFilterChange={this.onFilterChange} filter={filter} />
         </div>
         <TodoList
           todos={filteredTodos}
