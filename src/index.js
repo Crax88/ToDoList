@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import AppHeader from "./components/AppHeader";
 import SearchBar from "./components/SearchBar";
 import TodoList from "./components/TodoList";
+import StatusFilter from "./components/StatusFilter";
+import "./index.css";
 
 const App = () => {
   const todos = [
@@ -11,9 +13,12 @@ const App = () => {
     { label: "Have lunch", important: false, id: 3 }
   ];
   return (
-    <div>
-      <AppHeader />
-      <SearchBar />
+    <div className="todo-app">
+      <AppHeader toDo={1} done={3} />
+      <div className="top-panel d-flex">
+        <SearchBar />
+        <StatusFilter />
+      </div>
       <TodoList todos={todos} />
     </div>
   );
