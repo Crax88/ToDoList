@@ -1,21 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import AppHeader from "./components/AppHeader";
+import SearchBar from "./components/SearchBar";
+import TodoList from "./components/TodoList";
 
-const TodoList = () => {
-  return (
-    <ul>
-      <li>Drink Coffe</li>
-      <li>Do stuff</li>
-    </ul>
-  );
-};
-const AppHeader = () => {
-  return <h1>My Todo List</h1>;
-};
-const SearchBar = () => {
-  return <input placeholder="search" type="text" />;
-};
-const el = (
+const App = (
   <div>
     <AppHeader />
     <SearchBar />
@@ -23,4 +12,4 @@ const el = (
   </div>
 );
 
-ReactDOM.render(el, document.getElementById("root"));
+ReactDOM.render(App, document.getElementById("root"));
