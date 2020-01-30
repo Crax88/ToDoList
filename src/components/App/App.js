@@ -24,6 +24,12 @@ export default class App extends Component {
     ]
   };
 
+  toggleProperty = (arr, id, propName) => {
+    const idx = arr.findIndex(el => el.id === id);
+    const oldItem = arr[idx];
+    const newItem = { ...oldItem, [propName]: !oldItem[propName] };
+    return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
+  };
   deleteTodo = id => {
     this.setState(({ todos }) => {
       return {
@@ -42,35 +48,32 @@ export default class App extends Component {
 
   toggleImportant = id => {
     this.setState(({ todos }) => {
-      const idx = todos.findIndex(el => el.id === id);
-      const oldItem = todos[idx];
-      const newItem = { ...oldItem, important: !oldItem.important };
       return {
-        todos: [...todos.slice(0, idx), newItem, ...todos.slice(idx + 1)]
+        todos: this.toggleProperty(todos, id, "important")
       };
     });
   };
 
   toggleDone = id => {
     this.setState(({ todos }) => {
-      const idx = todos.findIndex(el => el.id === id);
-      const oldItem = todos[idx];
-      const newItem = { ...oldItem, done: !oldItem.done };
       return {
-        todos: [...todos.slice(0, idx), newItem, ...todos.slice(idx + 1)]
+        todos: this.toggleProperty(todos, id, "done")
       };
     });
   };
   render() {
+    const { todos } = this.state;
+    const doneCount = todos.filter(todo => todo.done).length;
+    const todoCount = todos.length - doneCount;
     return (
       <div className="todo-app">
-        <AppHeader toDo={1} done={3} />
+        <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
           <SearchBar />
           <StatusFilter />
         </div>
         <TodoList
-          todos={this.state.todos}
+          todos={todos}
           onDelete={this.deleteTodo}
           toggleImportant={this.toggleImportant}
           toggleDone={this.toggleDone}
